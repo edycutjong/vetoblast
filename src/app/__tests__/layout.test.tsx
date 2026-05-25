@@ -20,9 +20,18 @@ describe('RootLayout', () => {
     consoleSpy.mockRestore();
   });
 
-  it('should export valid metadata', () => {
+  it('should export valid metadata with correct title and description', () => {
     expect(metadata).toBeDefined();
     expect(metadata.title).toContain('VetoBlast');
     expect(metadata.description).toContain('AI agent');
+  });
+
+  it('should have OpenGraph metadata with correct site identity', () => {
+    expect(metadata.openGraph).toBeDefined();
+    expect(metadata.openGraph?.siteName).toBe('VetoBlast');
+  });
+
+  it('should have Twitter card metadata defined', () => {
+    expect(metadata.twitter).toBeDefined();
   });
 });
