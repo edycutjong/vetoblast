@@ -110,6 +110,25 @@ export const MOCK_INCIDENTS: Incident[] = [
     ],
     status: "vetoed",
   },
+  {
+    id: "inc-006",
+    timestamp: "2026-05-25T00:30:15Z",
+    agentId: "aider-agent-v2",
+    commandAttempted: "git config --global user.password [REDACTED_PWD]",
+    threatCategory: "secret_leak",
+    threatLevel: "medium",
+    redactedPayload: "user.password = '[REDACTED_PWD]'",
+    detectedSecrets: [
+      {
+        type: "Generic Password",
+        original: "123456",
+        redacted: "[REDACTED_PWD]",
+        entropy: 3.82,
+        confidence: 0.85,
+      },
+    ],
+    status: "vetoed",
+  },
 ];
 
 export const MOCK_METRICS: ScanMetrics = {

@@ -5,9 +5,9 @@
 
   <br/>
 
-  [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-ef4444?style=for-the-badge)](https://devpost-uoe-vetoblast.vercel.app)
+  [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-ef4444?style=for-the-badge)](https://vetoblast.edycu.dev)
   [![Pitch Video](https://img.shields.io/badge/🎬_Pitch-Video-ef4444?style=for-the-badge)](https://youtu.be/your-video)
-  [![Built for UOE](https://img.shields.io/badge/UOE-Summer_of_Code_2026-8b5cf6?style=for-the-badge)](https://devpost.com)
+  [![Built for UOE](https://img.shields.io/badge/UOE-Summer_of_Code_2026-8b5cf6?style=for-the-badge)](https://uoe-summer-of-code.devpost.com/)
 
   <br/>
 
@@ -17,7 +17,7 @@
   ![Tailwind](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=flat&logo=tailwindcss&logoColor=white)
   ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
   ![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat&logo=python&logoColor=white)
-  [![CI](https://github.com/edycutjong/devpost-uoe-vetoblast/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/devpost-uoe-vetoblast/actions/workflows/ci.yml)
+  [![CI](https://github.com/edycutjong/devpost-uoe-vetoblast/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/vetoblast/actions/workflows/ci.yml)
 
 </div>
 
@@ -54,8 +54,8 @@ AI coding agents scan `.env` files, execute shell commands, and send prompts to 
 
 ### Installation
 ```bash
-git clone https://github.com/edycutjong/devpost-uoe-vetoblast.git
-cd devpost-uoe-vetoblast
+git clone https://github.com/edycutjong/vetoblast.git
+cd vetoblast
 npm install
 cp .env.example .env.local
 npm run dev

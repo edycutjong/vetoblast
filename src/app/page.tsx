@@ -169,6 +169,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <div style={{ display: "none" }} className={cn(threatColor("high"), threatColor("low"))} />
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--surface)]/50 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
@@ -199,7 +200,7 @@ export default function Home() {
         {[
           { label: "Total Scans", value: MOCK_METRICS.totalScans.toLocaleString(), accent: false },
           { label: "Threats Blocked", value: String(MOCK_METRICS.totalBlocked), accent: true, color: "text-red-400" },
-          { label: "Secrets Caught", value: String(MOCK_METRICS.secretsCaught), accent: true, color: "text-red-400" },
+          { label: "Secrets Caught", value: String(MOCK_METRICS.secretsCaught), accent: true },
           { label: "Approved", value: MOCK_METRICS.totalApproved.toLocaleString(), accent: false },
           { label: "Scan Latency", value: `${MOCK_METRICS.avgScanLatencyMs}ms`, accent: false },
           { label: "False Positive", value: `${(MOCK_METRICS.falsePositiveRate * 100).toFixed(1)}%`, accent: false },
