@@ -14,7 +14,6 @@ export async function getIncidents(): Promise<Incident[]> {
     .order("timestamp", { ascending: false });
 
   if (error || !data) {
-    console.error("Failed to fetch incidents:", error);
     return [];
   }
 
@@ -39,7 +38,6 @@ export async function getMetrics(): Promise<ScanMetrics> {
     .single();
 
   if (error || !data) {
-    console.error("Failed to fetch metrics:", error);
     return {
       totalScans: 0,
       totalBlocked: 0,
@@ -69,7 +67,6 @@ export async function getTerminalFeed(): Promise<TerminalEntry[]> {
     .order("id", { ascending: true });
 
   if (error || !data) {
-    console.error("Failed to fetch terminal feed:", error);
     return [];
   }
 

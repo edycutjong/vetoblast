@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   type Incident,
   type ScanMetrics,
@@ -236,7 +237,7 @@ export default function Home() {
       <header className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--surface)]/50 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
-            <img src="/icon.svg" alt="VetoBlast" className="w-full h-full" />
+            <Image src="/icon.svg" alt="VetoBlast" width={32} height={32} className="w-full h-full" />
           </div>
           <h1 className="text-lg font-bold tracking-tight text-[var(--text-high)]">VetoBlast</h1>
           <span className="text-[10px] font-mono text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded-full animate-pulse-danger">

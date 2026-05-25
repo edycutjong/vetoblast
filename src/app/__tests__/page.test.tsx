@@ -1,11 +1,29 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+
+// Mock Supabase client to prevent createClient from crashing without env vars
+jest.mock('@/lib/supabase', () => ({
+  supabase: {},
+}));
+
+// Mock data fetchers to return mock data
+jest.mock('@/lib/data', () => {
+  const mockData = jest.requireActual('@/lib/mock-data');
+  return {
+    getIncidents: jest.fn().mockResolvedValue(mockData.MOCK_INCIDENTS),
+    getMetrics: jest.fn().mockResolvedValue(mockData.MOCK_METRICS),
+    getTerminalFeed: jest.fn().mockResolvedValue(mockData.TERMINAL_FEED),
+  };
+});
+
 import Home from '../page';
 
 describe('VetoBlast Home Page', () => {
-  it('renders stats, headers, monitored agents, and configuration', () => {
+  it('renders stats, headers, monitored agents, and configuration', async () => {
     render(<Home />);
 
-    expect(screen.getByRole('heading', { name: /VetoBlast/i })).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByRole('heading', { name: /VetoBlast/i })).toBeInTheDocument();
+    });
     expect(screen.getByText('PROXY ACTIVE')).toBeInTheDocument();
     expect(screen.getByText('DeBERTa-Sec LOADED')).toBeInTheDocument();
     expect(screen.getByText('Total Scans')).toBeInTheDocument();
@@ -15,8 +33,12 @@ describe('VetoBlast Home Page', () => {
     expect(screen.getAllByText('copilot-agent-v1')[0]).toBeInTheDocument();
   });
 
-  it('handles selecting different incidents and covers all threat level styling paths', () => {
+  it('handles selecting different incidents and covers all threat level styling paths', async () => {
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: /inc-004/i })).toBeInTheDocument();
+    });
 
     const inc004Button = screen.getByRole('button', { name: /inc-004/i });
     fireEvent.click(inc004Button);
@@ -32,28 +54,33 @@ describe('VetoBlast Home Page', () => {
     expect(screen.getByText('entropy:')).toBeInTheDocument();
   });
 
-  it('renders the terminal stream with live feed heading and entries', () => {
+  it('renders the terminal stream with live feed heading and entries', async () => {
     render(<Home />);
 
-    expect(screen.getByText('vetoblast-proxy — live')).toBeInTheDocument();
-    // Terminal feed entries reference the Stripe key block
+    await waitFor(() => {
+      expect(screen.getByText('vetoblast-proxy — live')).toBeInTheDocument();
+    });
     expect(screen.getAllByText(/sk_live_51N2/i).length).toBeGreaterThanOrEqual(1);
-    // DeBERTa-Sec scan entry is present
     expect(screen.getAllByText(/DeBERTa-Sec/i).length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders the monitored agents panel with all three agents', () => {
+  it('renders the monitored agents panel with all three agents', async () => {
     render(<Home />);
 
-    expect(screen.getByText('Monitored Agents')).toBeInTheDocument();
-    // Agents appear in both the list and header — use getAllByText
+    await waitFor(() => {
+      expect(screen.getByText('Monitored Agents')).toBeInTheDocument();
+    });
     expect(screen.getAllByText('copilot-agent-v1').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('cursor-agent-v3').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('aider-agent-v2').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders approve and reject action buttons in the incident detail panel and handles clicks', () => {
+  it('renders approve and reject action buttons in the incident detail panel and handles clicks', async () => {
     render(<Home />);
+
+    await waitFor(() => {
+      expect(screen.getByRole('button', { name: 'APPROVE' })).toBeInTheDocument();
+    });
 
     const approveButton = screen.getByRole('button', { name: 'APPROVE' });
     const rejectButton = screen.getByRole('button', { name: 'REJECT' });
@@ -61,35 +88,38 @@ describe('VetoBlast Home Page', () => {
     expect(approveButton).toBeInTheDocument();
     expect(rejectButton).toBeInTheDocument();
 
-    // Click approve
     fireEvent.click(approveButton);
     expect(screen.getByRole('button', { name: 'APPROVED ✓' })).toBeInTheDocument();
 
-    // Click reject
     fireEvent.click(screen.getByRole('button', { name: 'REJECT' }));
     expect(screen.getByRole('button', { name: 'REJECTED ✗' })).toBeInTheDocument();
   });
 
-  it('renders scanner configuration details with block pattern list', () => {
+  it('renders scanner configuration details with block pattern list', async () => {
     render(<Home />);
 
-    expect(screen.getByText('Scanner Config')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Scanner Config')).toBeInTheDocument();
+    });
     expect(screen.getByText('DeBERTa-Sec-ONNX')).toBeInTheDocument();
-    // Block Patterns value is uniquely comma-formatted in the config panel
     expect(screen.getByText('rm -rf, chmod 777, DROP')).toBeInTheDocument();
   });
 
-  it('renders threat intercept rate gauge', () => {
+  it('renders threat intercept rate gauge', async () => {
     render(<Home />);
 
-    expect(screen.getByText('THREAT INTERCEPT RATE')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('THREAT INTERCEPT RATE')).toBeInTheDocument();
+    });
     expect(screen.getByText('BLOCKED')).toBeInTheDocument();
   });
 
-  it('renders footer with correct zero-trust branding', () => {
+  it('renders footer with correct zero-trust branding', async () => {
     render(<Home />);
 
-    expect(screen.getByText(/VetoBlast.*UOE Summer of Code 2026/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/VetoBlast.*UOE Summer of Code 2026/i)).toBeInTheDocument();
+    });
     expect(screen.getByText(/Zero-Trust.*DeBERTa-Sec/i)).toBeInTheDocument();
   });
 });
