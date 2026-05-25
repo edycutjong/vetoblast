@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
-  MOCK_INCIDENTS,
-  MOCK_METRICS,
-  TERMINAL_FEED,
   type Incident,
+  type ScanMetrics,
 } from "@/lib/mock-data";
+import { getIncidents, getMetrics, getTerminalFeed, type TerminalEntry } from "@/lib/data";
 
 function cn(...classes: (string | false | undefined)[]) {
   return classes.filter(Boolean).join(" ");
@@ -57,7 +56,7 @@ function RiskGauge({ blocked, total }: { blocked: number; total: number }) {
 }
 
 /* ── Terminal Feed ── */
-function TerminalStream() {
+function TerminalStream({ feed }: { feed: TerminalEntry[] }) {
   return (
     <div className="glass-card overflow-hidden">
       <div className="px-5 py-3 border-b border-[var(--border)] flex items-center justify-between">
@@ -72,7 +71,7 @@ function TerminalStream() {
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
       </div>
       <div className="p-4 font-mono text-[11px] leading-6 max-h-[320px] overflow-y-auto bg-black/30">
-        {TERMINAL_FEED.map((entry, i) => (
+        {feed.map((entry, i) => (
           <div key={i} className="flex gap-2">
             <span className="text-[var(--text-low)] min-w-[60px]">{entry.time}</span>
             <span className={cn(
@@ -189,10 +188,46 @@ function IncidentDetail({
   );
 }
 
+/* ── Loading Skeleton ── */
+function LoadingSkeleton() {
+  return (
+    <div className="flex flex-col min-h-screen items-center justify-center gap-4">
+      <div className="w-8 h-8 border-2 border-red-500 border-t-transparent rounded-full animate-spin" />
+      <span className="text-xs font-mono text-[var(--text-low)] animate-pulse">
+        Loading from Supabase...
+      </span>
+    </div>
+  );
+}
+
 /* ── Main Dashboard ── */
 export default function Home() {
-  const [selectedIncident, setSelectedIncident] = useState<Incident>(MOCK_INCIDENTS[0]);
+  const [incidents, setIncidents] = useState<Incident[]>([]);
+  const [metrics, setMetrics] = useState<ScanMetrics | null>(null);
+  const [terminalFeed, setTerminalFeed] = useState<TerminalEntry[]>([]);
+  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [decisions, setDecisions] = useState<Record<string, "approved" | "rejected">>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+      const [incData, metricsData, feedData] = await Promise.all([
+        getIncidents(),
+        getMetrics(),
+        getTerminalFeed(),
+      ]);
+      setIncidents(incData);
+      setMetrics(metricsData);
+      setTerminalFeed(feedData);
+      if (incData.length > 0) setSelectedIncident(incData[0]);
+      setLoading(false);
+    }
+    fetchData();
+  }, []);
+
+  if (loading || !metrics || !selectedIncident) {
+    return <LoadingSkeleton />;
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -216,20 +251,20 @@ export default function Home() {
           <div className="h-3 w-px bg-[var(--border)]" />
           <span className="text-[var(--text-low)]">DeBERTa-Sec LOADED</span>
           <div className="h-3 w-px bg-[var(--border)]" />
-          <span className="text-[var(--text-low)]">Latency: {MOCK_METRICS.avgScanLatencyMs}ms</span>
+          <span className="text-[var(--text-low)]">Latency: {metrics.avgScanLatencyMs}ms</span>
         </div>
       </header>
 
       {/* Stats Banner */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 p-6">
         {[
-          { label: "Total Scans", value: MOCK_METRICS.totalScans.toLocaleString(), accent: false },
-          { label: "Threats Blocked", value: String(MOCK_METRICS.totalBlocked), accent: true, color: "text-red-400" },
-          { label: "Secrets Caught", value: String(MOCK_METRICS.secretsCaught), accent: true },
-          { label: "Approved", value: MOCK_METRICS.totalApproved.toLocaleString(), accent: false },
-          { label: "Scan Latency", value: `${MOCK_METRICS.avgScanLatencyMs}ms`, accent: false },
-          { label: "False Positive", value: `${(MOCK_METRICS.falsePositiveRate * 100).toFixed(1)}%`, accent: false },
-          { label: "Uptime", value: MOCK_METRICS.uptime, accent: false },
+          { label: "Total Scans", value: metrics.totalScans.toLocaleString(), accent: false },
+          { label: "Threats Blocked", value: String(metrics.totalBlocked), accent: true, color: "text-red-400" },
+          { label: "Secrets Caught", value: String(metrics.secretsCaught), accent: true },
+          { label: "Approved", value: metrics.totalApproved.toLocaleString(), accent: false },
+          { label: "Scan Latency", value: `${metrics.avgScanLatencyMs}ms`, accent: false },
+          { label: "False Positive", value: `${(metrics.falsePositiveRate * 100).toFixed(1)}%`, accent: false },
+          { label: "Uptime", value: metrics.uptime, accent: false },
         ].map((s, i) => (
           <div key={i} className="glass-card p-4">
             <span className="text-[10px] font-mono uppercase tracking-widest text-[var(--text-low)] block mb-1">
@@ -253,9 +288,9 @@ export default function Home() {
             <h2 className="text-xs font-mono uppercase tracking-widest text-[var(--text-low)]">
               Incident Log
             </h2>
-            <span className="text-[10px] font-mono text-red-400">{MOCK_INCIDENTS.filter(i => i.status === "vetoed").length} vetoed</span>
+            <span className="text-[10px] font-mono text-red-400">{incidents.filter(i => i.status === "vetoed").length} vetoed</span>
           </div>
-          {MOCK_INCIDENTS.map((inc) => (
+          {incidents.map((inc) => (
             <button
               key={inc.id}
               onClick={() => setSelectedIncident(inc)}
@@ -294,12 +329,12 @@ export default function Home() {
             onApprove={() => setDecisions(prev => ({ ...prev, [selectedIncident.id]: "approved" }))}
             onReject={() => setDecisions(prev => ({ ...prev, [selectedIncident.id]: "rejected" }))}
           />
-          <TerminalStream />
+          <TerminalStream feed={terminalFeed} />
         </div>
 
         {/* Right: Gauge + Agent Info */}
         <div className="lg:col-span-3 flex flex-col gap-4">
-          <RiskGauge blocked={MOCK_METRICS.totalBlocked} total={MOCK_METRICS.totalScans} />
+          <RiskGauge blocked={metrics.totalBlocked} total={metrics.totalScans} />
 
           {/* Active Agents */}
           <div className="glass-card p-5">
