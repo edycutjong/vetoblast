@@ -37,6 +37,53 @@ AI coding agents scan `.env` files, execute shell commands, and send prompts to 
 - 📊 **Cyberpunk SOC Dashboard**: Real-time terminal tracer, threat speedometer, and incident review console
 - 🏠 **100% Local**: No credentials ever leave the developer's machine
 
+## 📸 Screenshots
+
+<details>
+<summary><strong>Click to expand all dashboard screenshots</strong></summary>
+
+### Stripe API Key Exfiltration — BLOCKED
+> Agent `copilot-agent-v1` attempted a git commit + push containing a Stripe live API key. VetoBlast detected the secret with 97% confidence and blocked execution.
+
+<img src="docs/screenshots/inc-001.png" alt="Incident 001 — Stripe key exfiltration blocked" width="100%">
+
+---
+
+### AWS Secret Key Leak via curl — BLOCKED
+> Agent `cursor-agent-v3` piped config JSON containing an AWS secret key to an external LLM API endpoint. Entropy analysis flagged it at 4.91.
+
+<img src="docs/screenshots/inc-002.png" alt="Incident 002 — AWS secret key leak blocked" width="100%">
+
+---
+
+### Destructive Shell Command — VETOED
+> Agent attempted `rm -rf /usr/local/bin && chmod 777 /etc/passwd`. Pattern-matched and vetoed before execution.
+
+<img src="docs/screenshots/inc-003.png" alt="Incident 003 — Destructive command vetoed" width="100%">
+
+---
+
+### Safe Command — APPROVED
+> `npm run build` passed all scans. No secrets detected, no destructive patterns.
+
+<img src="docs/screenshots/inc-004.png" alt="Incident 004 — Safe command approved" width="100%">
+
+---
+
+### Deploy Script with GitHub PAT — BLOCKED
+> `python deploy.sh` contained a GitHub Personal Access Token in plaintext. DeBERTa classified intent as exfiltration.
+
+<img src="docs/screenshots/inc-005.png" alt="Incident 005 — GitHub PAT in deploy script" width="100%">
+
+---
+
+### Git Config Password Exposure — REDACTED
+> Agent attempted `git config --global user.password` with a plaintext password. VetoBlast redacted to `[REDACTED_PWD]`.
+
+<img src="docs/screenshots/inc-006.png" alt="Incident 006 — Git password redacted" width="100%">
+
+</details>
+
 ## 🏗️ Architecture & Tech Stack
 
 ```mermaid
