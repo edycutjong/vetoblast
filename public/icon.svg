@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Brand Gradient with Dynamic Variable and Hex Fallback -->
+    <linearGradient id="brand-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="var(--primary, #EF4444)"/>
+      <stop offset="100%" stop-color="var(--accent, #06B6D4)"/>
+    </linearGradient>
+
+    <!-- Inner Glow/Shadow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="16" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+
+    <!-- Node Glow Filter -->
+    <filter id="alert-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="10" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <rect width="100%" height="100%" fill="none"/>
+
+  <!-- Outer Octagon / Terminal Boundary -->
+  <polygon 
+    points="256,40 416,110 416,402 256,472 96,402 96,110" 
+    fill="rgba(10, 10, 14, 0.7)" 
+    stroke="url(#brand-grad)" 
+    stroke-width="16" 
+    stroke-linejoin="round"
+    filter="url(#glow)"
+    opacity="0.95"
+  />
+
+  <!-- Terminal Brackets inside Hexagon [ ] -->
+  <!-- Left Bracket -->
+  <path 
+    d="M 190,150 L 150,150 L 150,362 L 190,362" 
+    fill="none" 
+    stroke="rgba(255, 255, 255, 0.08)" 
+    stroke-width="12" 
+    stroke-linecap="round"
+  />
+
+  <!-- Right Bracket -->
+  <path 
+    d="M 322,150 L 362,150 L 362,362 L 322,362" 
+    fill="none" 
+    stroke="rgba(255, 255, 255, 0.08)" 
+    stroke-width="12" 
+    stroke-linecap="round"
+  />
+
+  <!-- Main Diagonal Veto Strike-through representing blocking/firewall -->
+  <line 
+    x1="130" 
+    y1="382" 
+    x2="382" 
+    y2="130" 
+    stroke="url(#brand-grad)" 
+    stroke-width="32" 
+    stroke-linecap="round"
+    filter="url(#glow)"
+  />
+
+  <!-- Red Alert Terminal Cursor -->
+  <rect 
+    x="236" 
+    y="236" 
+    width="40" 
+    height="40" 
+    fill="#EF4444" 
+    filter="url(#alert-glow)"
+    rx="4"
+  />
+</svg>
