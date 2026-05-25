@@ -197,6 +197,22 @@ vetoblast/
 ## Acknowledged Limitation
 **Obfuscated Key Split**: If a secret key is split across multiple variables and concatenated during execution, raw stream evaluations may fail to identify the pattern, requiring supplementary environment inspection rules.
 
+## 🔨 Built With
+
+- [Next.js 16](https://nextjs.org/) — App Router, React Server Components
+- [React 19](https://react.dev/) — UI framework
+- [TypeScript](https://www.typescriptlang.org/) — Type-safe JavaScript
+- [Tailwind CSS v4](https://tailwindcss.com/) — Utility-first styling
+- [Node.js](https://nodejs.org/) + [node-pty](https://github.com/nickarora/node-pty) — Terminal stream interception
+- [Python 3.12](https://www.python.org/) — AI classifier backend
+- [FastAPI](https://fastapi.tiangolo.com/) — REST API server
+- [DeBERTa-Sec](https://huggingface.co/microsoft/deberta-v3-base) — Fine-tuned ONNX classifier for command intent
+- [ONNX Runtime](https://onnxruntime.ai/) — Local model inference
+- [Supabase](https://supabase.com/) — PostgreSQL audit log with RLS
+- [Jest](https://jestjs.io/) — Testing framework (51 passing tests)
+- [GitHub Actions](https://github.com/features/actions) — CI/CD pipeline
+- [Vercel](https://vercel.com/) — Frontend deployment
+
 ## 📄 License
 [MIT](LICENSE) © 2026 Edy Cu
 
