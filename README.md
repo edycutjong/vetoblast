@@ -7,7 +7,7 @@
 
   [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-ef4444?style=for-the-badge)](https://vetoblast.edycu.dev)
   [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-10b981?style=for-the-badge)](https://vetoblast.edycu.dev/pitch.html)
-  [![Pitch Video](https://img.shields.io/badge/🎬_Pitch-Video-ef4444?style=for-the-badge)](https://youtu.be/your-video)
+  [![Tests](https://img.shields.io/badge/✅_Tests-50_passing-22c55e?style=for-the-badge)](#-testing--ci)
   [![Built for UOE](https://img.shields.io/badge/UOE-Summer_of_Code_2026-8b5cf6?style=for-the-badge)](https://uoe-summer-of-code.devpost.com/)
 
   <br/>
@@ -18,7 +18,7 @@
   ![Tailwind](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=flat&logo=tailwindcss&logoColor=white)
   ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
   ![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat&logo=python&logoColor=white)
-  [![CI](https://github.com/edycutjong/vetoblast/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/vetoblast/actions/workflows/ci.yml)
+  [![CI](https://github.com/edycutjong/devpost-uoe-vetoblast/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/devpost-uoe-vetoblast/actions/workflows/ci.yml)
 
 </div>
 
@@ -55,35 +55,42 @@ AI coding agents scan `.env` files, execute shell commands, and send prompts to 
 
 ### Installation
 ```bash
-git clone https://github.com/edycutjong/vetoblast.git
-cd vetoblast
+git clone https://github.com/edycutjong/devpost-uoe-vetoblast.git
+cd devpost-uoe-vetoblast
 npm install
 cp .env.example .env.local
 npm run dev
 ```
 
 ## 🧪 Testing & CI
+
+**50 passing tests** across 4 test suites — covering mock data integrity, incident log consistency, entropy/confidence validation, threat level coverage, metrics cross-validation, terminal feed type validation, and all interactive dashboard state transitions.
+
 ```bash
+npm test              # Run all 50 tests
+npm run test:coverage # Coverage report
 npm run lint          # ESLint
 npm run typecheck     # TypeScript check
 npm run build         # Production build
-npm run ci            # Full CI pipeline
+npm run ci            # Full CI pipeline (lint + typecheck + test + build)
 ```
+
+CI runs on Node.js 20, 22, and 24 via GitHub Actions on every push.
 
 ## 📁 Project Structure
 ```
 devpost-uoe-vetoblast/
 ├── docs/              # README assets
 ├── src/
-│   ├── app/           # Next.js pages
-│   └── lib/           # Mock data & utilities
+│   ├── app/           # Next.js pages + __tests__/
+│   └── lib/           # Mock data & utilities + __tests__/
 ├── .github/           # CI workflows
 ├── .env.example       # Environment template
 ├── LICENSE            # MIT
 └── README.md          # You are here
 ```
 
-### Acknowledged Limitation
+## Acknowledged Limitation
 **Obfuscated Key Split**: If a secret key is split across multiple variables and concatenated during execution, raw stream evaluations may fail to identify the pattern, requiring supplementary environment inspection rules.
 
 ## 📄 License
