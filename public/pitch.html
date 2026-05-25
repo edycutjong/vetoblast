@@ -1,309 +1,377 @@
 <!DOCTYPE html>
-<!--
-  VetoBlast Pitch Deck — UOE Summer of Code 2026
-  Navigation: ← → arrows, spacebar advances
-  Presenter mode: P key | Contrast debug: C key
-  Print to PDF: Cmd+P → Save as PDF → Landscape → Clean 10-page deck
--->
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VetoBlast — Pitch Deck</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg: #0a0a0f;
-  --primary: #06b6d4;
-  --accent: #ef4444;
-  --text: #f1f5f9;
-  --muted: #64748b;
-  --surface: #111118;
-  --success: #22c55e;
-  --warning: #f59e0b;
-  --font-display: "Inter Tight", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { background: var(--bg); color: var(--text); font-family: var(--font-display); overflow: hidden; height: 100%; }
-.stage { width: 1920px; height: 1080px; position: relative; transform-origin: top left; }
-.slide { width: 1920px; height: 1080px; position: absolute; top: 0; left: 0; display: none; padding: 80px 120px; overflow: hidden; }
-.slide.active { display: flex; }
-.slide-counter { position: fixed; bottom: 24px; right: 40px; font: 600 14px/1 var(--font-mono); color: var(--muted); z-index: 100; }
-aside.speaker-notes { display: none; }
-body.presenter aside.speaker-notes { display: block; position: fixed; bottom: 0; left: 0; right: 0; height: 20%; background: #000; color: #aaa; font: 14px/1.6 var(--font-mono); padding: 20px 40px; border-top: 2px solid var(--accent); z-index: 200; }
-.badge { display: inline-block; font: 600 14px/1 var(--font-mono); padding: 8px 20px; border-radius: 100px; text-transform: uppercase; letter-spacing: 2px; }
-.badge-red { background: rgba(239,68,68,0.15); color: var(--accent); border: 1px solid rgba(239,68,68,0.3); }
-.badge-cyan { background: rgba(6,182,212,0.15); color: var(--primary); border: 1px solid rgba(6,182,212,0.3); }
-.big-number { font: 900 120px/1 var(--font-display); color: var(--accent); text-shadow: 0 0 60px rgba(239,68,68,0.4); }
-.mono { font-family: var(--font-mono); }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
-h1 { font: 900 72px/1.05 var(--font-display); }
-h2 { font: 700 48px/1.1 var(--font-display); }
-h3 { font: 600 32px/1.2 var(--font-display); }
-p, li { font: 400 20px/1.6 var(--font-display); color: #cbd5e1; }
-.label { font: 600 12px/1 var(--font-mono); color: var(--muted); text-transform: uppercase; letter-spacing: 3px; }
-.card { background: rgba(17,17,24,0.6); border: 1px solid rgba(239,68,68,0.1); border-radius: 16px; padding: 40px; }
-.glow { box-shadow: 0 0 40px rgba(239,68,68,0.15); }
-.terminal { background: #08080d; border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; padding: 32px; font: 16px/1.8 var(--font-mono); }
-@page { size: 16in 9in landscape; margin: 0; }
-@media print {
-  html, body, .slide { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  .slide { display: block !important; page-break-after: always; break-inside: avoid; position: relative; }
-  .slide-counter, aside.speaker-notes { display: none !important; }
-  .stage { transform: none !important; }
-}
-@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VetoBlast — Pitch Deck</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    h1, h2, h3, .font-display { font-family: 'Outfit', sans-serif; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .slide { display: none; opacity: 0; transition: opacity 0.4s ease; }
+    .slide.active { display: flex; opacity: 1; }
+    .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(148, 163, 184, 0.08); }
+    .glow-red { box-shadow: 0 0 40px rgba(239, 68, 68, 0.15), inset 0 1px 0 rgba(239, 68, 68, 0.08); }
+    .glow-danger { box-shadow: 0 0 60px rgba(239, 68, 68, 0.2); }
+    .accent-line { width: 48px; height: 3px; background: #ef4444; border-radius: 2px; }
+    .stat-card { background: linear-gradient(135deg, rgba(239, 68, 68, 0.08), rgba(15, 23, 42, 0.4)); border: 1px solid rgba(239, 68, 68, 0.15); }
+    .stat-card-safe { background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(15, 23, 42, 0.4)); border: 1px solid rgba(6, 182, 212, 0.15); }
+    @keyframes pulse-danger { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+    .pulse-danger { animation: pulse-danger 1.5s ease-in-out infinite; }
+    .flow-arrow { color: #ef4444; font-size: 1.5rem; }
+    .slide-number { font-variant-numeric: tabular-nums; }
+    .blocked-text { color: #ef4444; text-decoration: line-through; text-decoration-color: #ef4444; }
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem !important; }
+      h2 { font-size: 1.75rem !important; }
+    }
+  </style>
 </head>
-<body>
-<div class="stage" id="stage">
+<body class="bg-[#09090b] text-slate-100 h-full overflow-hidden flex flex-col">
 
-<!-- SLIDE 1: COVER -->
-<div class="slide active" style="flex-direction:column;justify-content:center;align-items:flex-start;background:linear-gradient(135deg,#0a0a0f 0%,#111118 50%,#0d0d14 100%);">
-  <div class="badge badge-red" style="margin-bottom:40px;">Built for UOE Summer of Code 2026</div>
-  <h1 style="margin-bottom:20px;">VetoBlast <span style="color:var(--accent);"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-0.125em;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span></h1>
-  <h3 style="color:#94a3b8;font-weight:400;max-width:900px;">Zero-trust runtime proxy that intercepts AI agent commands, redacts secrets, and vetoes destructive executions</h3>
-  <div style="position:absolute;right:120px;bottom:100px;">
-    <div class="terminal" style="width:550px;">
-      <span style="color:var(--muted);">$ export STRIPE_KEY=sk_live_51N2xR2...K8mP</span><br>
-      <span style="color:var(--accent);">⛔ [HALT] Stripe Live API Key detected</span><br>
-      <span style="color:var(--primary);">→ Replaced with [REDACTED_STRIPE_KEY_5a9b]</span><br>
-      <span style="color:var(--success);">✓ Sanitized payload passed to agent</span><br>
-      <span style="color:var(--muted);animation:blink 1s infinite;">█</span>
-    </div>
-  </div>
-  <aside class="speaker-notes">Open with the terminal intercept demo. Show a live secret being caught, redacted, and safely passed through. Your AI tried. Veto said no.</aside>
-</div>
+  <div class="fixed top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-red-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
-<!-- SLIDE 2: HOOK -->
-<div class="slide" style="flex-direction:column;justify-content:center;align-items:center;text-align:center;background:var(--bg);">
-  <div class="big-number">$85,000</div>
-  <h3 style="color:#94a3b8;margin-top:24px;max-width:800px;">billed to an intern's AWS account in 4 hours — because an AI agent pushed <span style="color:var(--accent);">.env</span> credentials to a public repo</h3>
-  <aside class="speaker-notes">True incident pattern. AI agents don't understand secrets. They scan .env files, execute commands, and send prompts to LLMs — without security awareness. $85K in AWS charges.</aside>
-</div>
+  <div class="flex-1 flex items-center justify-center p-6 md:p-12 relative z-10">
 
-<!-- SLIDE 3: PROBLEM -->
-<div class="slide" style="flex-direction:column;justify-content:center;background:var(--bg);">
-  <div class="label" style="margin-bottom:16px;">THE PROBLEM</div>
-  <h2 style="margin-bottom:40px;max-width:1000px;">AI agents read your <span style="color:var(--accent);">.env</span>, execute <span style="color:var(--accent);">rm -rf</span>,<br/>and pipe secrets to external LLMs.</h2>
-  <div class="grid-3" style="max-width:1400px;">
-    <div class="card">
-      <h3 style="color:var(--accent);margin-bottom:12px;">Secret Exfiltration</h3>
-      <p>Agents read config files containing API keys, then include them in LLM prompts or git commits — leaking credentials to external services.</p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--accent);margin-bottom:12px;">Destructive Commands</h3>
-      <p>Hallucinated agent outputs like <code style="color:var(--accent);">rm -rf /usr/local</code> or <code style="color:var(--accent);">chmod 777 /etc/passwd</code> execute without human review.</p>
-    </div>
-    <div class="card">
-      <h3 style="color:var(--accent);margin-bottom:12px;">Zero Audit Trail</h3>
-      <p>No logging of what agents read, send, or execute. When a breach occurs, forensics finds nothing.</p>
-    </div>
-  </div>
-  <aside class="speaker-notes">Three attack vectors: 1) Secret exfiltration through LLM prompts, 2) Destructive shell commands from hallucinations, 3) No audit trail for forensics.</aside>
-</div>
-
-<!-- SLIDE 4: SOLUTION -->
-<div class="slide" style="flex-direction:column;justify-content:center;background:var(--bg);">
-  <div class="label" style="margin-bottom:16px;">THE SOLUTION</div>
-  <h2 style="margin-bottom:40px;">A proxy that sits between the agent and your terminal.</h2>
-  <div style="display:flex;gap:60px;align-items:flex-start;">
-    <div style="flex:1;">
-      <div class="card glow" style="margin-bottom:24px;">
-        <h3 style="color:var(--accent);margin-bottom:8px;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-0.125em;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> In-Flight Redaction</h3>
-        <p>Entropy analysis + DeBERTa-Sec classifier detects and replaces secrets before they reach external services. 8.3ms overhead.</p>
+    <!-- Slide 01: Title -->
+    <div class="slide active max-w-5xl w-full flex-col md:flex-row items-center justify-between gap-12">
+      <div class="flex-1 flex flex-col items-start text-left">
+        <span class="text-xs font-mono tracking-widest text-red-400 uppercase mb-6">Slide 01 · Title</span>
+        <h1 class="text-6xl md:text-7xl font-black tracking-tighter leading-[0.9] mb-6">
+          VETO<span class="text-red-500">BLAST</span>
+        </h1>
+        <div class="accent-line mb-6"></div>
+        <p class="text-slate-400 text-lg max-w-lg leading-relaxed">
+          Zero-trust runtime proxy that intercepts AI agent terminal commands — redacting secrets and vetoing malicious shell executions before they reach the system.
+        </p>
+        <div class="flex items-center gap-3 mt-8">
+          <span class="px-3 py-1 text-[10px] font-mono uppercase tracking-wider border border-red-500/20 text-red-400 rounded-full">UOE Summer of Code 2026</span>
+          <span class="px-3 py-1 text-[10px] font-mono uppercase tracking-wider border border-red-500/30 text-red-400 rounded-full pulse-danger">INTERCEPTING</span>
+        </div>
       </div>
-      <div class="card glow" style="margin-bottom:24px;">
-        <h3 style="color:var(--primary);margin-bottom:8px;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-0.125em;"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg> Command Veto Gate</h3>
-        <p>Pattern-matching blocks destructive commands (rm -rf, chmod 777, DROP TABLE) with zero latency.</p>
-      </div>
-      <div class="card glow">
-        <h3 style="color:var(--success);margin-bottom:8px;"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-0.125em;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> SOC Dashboard</h3>
-        <p>Cyberpunk control panel with real-time terminal tracer, incident review, and risk speedometer.</p>
+      <div class="flex-1 glass glow-red rounded-2xl p-8 max-w-md w-full">
+        <span class="text-[10px] font-mono text-slate-600 uppercase tracking-wider block mb-4">Live Intercept Feed</span>
+        <div class="space-y-3 font-mono text-xs">
+          <div class="text-slate-500">$ copilot-agent-v1 exec:</div>
+          <div class="blocked-text">curl -H "Authorization: sk_live_51N2..."</div>
+          <div class="text-red-400 mt-1">⛔ BLOCKED — Secret Exfiltration</div>
+          <div class="text-slate-500 mt-3">$ aider-agent-v2 exec:</div>
+          <div class="blocked-text">rm -rf /etc/nginx/ssl/*</div>
+          <div class="text-red-400 mt-1">⛔ BLOCKED — Destructive Command</div>
+          <div class="text-emerald-400 mt-3 text-[10px]">→ DeBERTa-Sec confidence: 0.97</div>
+        </div>
       </div>
     </div>
-    <div style="flex:1;background:var(--surface);border-radius:16px;border:1px solid rgba(239,68,68,0.2);height:560px;display:flex;align-items:center;justify-content:center;">
-      <img src="https://placehold.co/600x500/111118/ef4444?text=Security+Dashboard" alt="Dashboard" style="border-radius:12px;max-width:100%;"/>
-    </div>
-  </div>
-  <aside class="speaker-notes">VetoBlast is a transparent proxy. It intercepts every command, scans for secrets using entropy + AI classification, blocks destructive patterns, and logs everything.</aside>
-</div>
 
-<!-- SLIDE 5: ARCHITECTURE -->
-<div class="slide" style="flex-direction:column;justify-content:center;background:var(--bg);">
-  <div class="label" style="margin-bottom:16px;">HOW IT WORKS</div>
-  <h2 style="margin-bottom:40px;">Architecture — Zero-Trust Pipeline</h2>
-  <div style="display:flex;gap:24px;align-items:center;justify-content:center;">
-    <div class="card" style="text-align:center;min-width:200px;">
-      <div class="label">Agent</div>
-      <h3 style="margin-top:8px;font-size:24px;">AI Agent</h3>
-      <p class="mono" style="font-size:13px;color:var(--muted);">Copilot / Cursor / Aider</p>
-    </div>
-    <div style="font-size:32px;color:var(--accent);">→</div>
-    <div class="card" style="text-align:center;min-width:200px;border-color:rgba(239,68,68,0.3);">
-      <div class="label" style="color:var(--accent);">INTERCEPT</div>
-      <h3 style="margin-top:8px;font-size:24px;color:var(--accent);">node-pty</h3>
-      <p class="mono" style="font-size:13px;color:var(--muted);">Terminal Stream Proxy</p>
-    </div>
-    <div style="font-size:32px;color:var(--accent);">→</div>
-    <div class="card" style="text-align:center;min-width:200px;border-color:rgba(6,182,212,0.3);">
-      <div class="label" style="color:var(--primary);">CLASSIFY</div>
-      <h3 style="margin-top:8px;font-size:24px;">DeBERTa-Sec</h3>
-      <p class="mono" style="font-size:13px;color:var(--muted);">ONNX · 8.3ms</p>
-    </div>
-    <div style="font-size:32px;color:var(--success);">→</div>
-    <div class="card" style="text-align:center;min-width:200px;border-color:rgba(34,197,94,0.3);">
-      <div class="label" style="color:var(--success);">PASS/BLOCK</div>
-      <h3 style="margin-top:8px;font-size:24px;">Terminal</h3>
-      <p class="mono" style="font-size:13px;color:var(--muted);">Sanitized Output</p>
-    </div>
-  </div>
-  <div style="margin-top:40px;display:flex;gap:24px;justify-content:center;">
-    <span class="badge badge-red" style="font-size:12px;">8.3ms scan latency</span>
-    <span class="badge badge-cyan" style="font-size:12px;">2% false positive rate</span>
-    <span class="badge badge-cyan" style="font-size:12px;">100% local inference</span>
-  </div>
-  <aside class="speaker-notes">Agent output flows through node-pty proxy, gets scanned by DeBERTa-Sec classifier (ONNX, 8.3ms), and either passes or gets blocked/redacted. Everything runs locally.</aside>
-</div>
-
-<!-- SLIDE 6: DEMO -->
-<div class="slide" style="flex-direction:column;justify-content:center;background:var(--bg);">
-  <div class="label" style="margin-bottom:16px;">LIVE DEMO</div>
-  <h2 style="margin-bottom:24px;">Your AI tried. Veto said no.</h2>
-  <div class="terminal" style="max-width:1400px;font-size:15px;line-height:2;">
-    <span style="color:var(--muted);">[01:12:34]</span> <span style="color:var(--accent);">⛔ [HALT]</span> <span style="color:var(--text);">sk_live_51N2xR2...K8mP detected in staged git payload</span><br>
-    <span style="color:var(--muted);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span style="color:var(--primary);">→ Replaced: [REDACTED_STRIPE_KEY_5a9b]</span> <span style="color:var(--muted);">entropy: 4.82 | confidence: 97%</span><br><br>
-    <span style="color:var(--muted);">[01:08:12]</span> <span style="color:var(--accent);">⛔ [HALT]</span> <span style="color:var(--text);">AWS_SECRET_ACCESS_KEY leaked to external LLM endpoint</span><br>
-    <span style="color:var(--muted);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span> <span style="color:var(--primary);">→ Replaced: [REDACTED_AWS_KEY_8f3b]</span> <span style="color:var(--muted);">entropy: 4.91 | confidence: 99%</span><br><br>
-    <span style="color:var(--muted);">[00:55:41]</span> <span style="color:var(--accent);">⛔ [HALT]</span> <span style="color:var(--text);">Destructive shell: rm -rf /usr/local/bin — execution vetoed</span><br><br>
-    <span style="color:var(--muted);">[00:42:18]</span> <span style="color:var(--success);">✓ [PASS]</span> <span style="color:var(--text);">npm run build — no secrets detected, build hash cleared</span><br><br>
-    <span style="color:var(--muted);">[00:28:09]</span> <span style="color:var(--primary);">ℹ [SCAN]</span> <span style="color:var(--text);">DeBERTa-Sec: d5a89f... classified as SHA256 hash (NOT secret) — passed</span>
-  </div>
-  <aside class="speaker-notes">Walk through the terminal: Stripe key caught and redacted, AWS key caught before LLM exfiltration, destructive rm -rf blocked, safe commands passed. DeBERTa distinguishes hashes from secrets.</aside>
-</div>
-
-<!-- SLIDE 7: FEATURES -->
-<div class="slide" style="flex-direction:column;justify-content:center;background:var(--bg);">
-  <div class="label" style="margin-bottom:16px;">KEY FEATURES</div>
-  <h2 style="margin-bottom:48px;">What makes it different</h2>
-  <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;">
-    <div class="card glow" style="grid-row:span 2;">
-      <div style="margin-bottom:16px;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.57-3.25 3.92"/><path d="M8 6a4 4 0 0 1 8 0"/><path d="M12 2a4 4 0 0 0-4 4c0 1.95 1.4 3.57 3.25 3.92"/><path d="M12 10v2"/><path d="M12 16a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/><path d="M17 12h2"/><path d="M5 12h2"/><path d="M15 16l1.5 1.5"/><path d="M7.5 16L9 17.5"/></svg></div>
-      <h3 style="color:var(--accent);margin-bottom:12px;">DeBERTa-Sec Classifier</h3>
-      <p>ONNX model trained to distinguish real secrets (API keys, tokens) from benign high-entropy strings (hashes, UUIDs). 2% false positive rate. 8.3ms inference.</p>
-    </div>
-    <div class="card">
-      <div style="margin-bottom:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-      <h3 style="font-size:22px;margin-bottom:8px;">In-Flight Redaction</h3>
-      <p style="font-size:16px;">Secrets replaced before they leave the machine. No leaks, ever.</p>
-    </div>
-    <div class="card">
-      <div style="margin-bottom:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div>
-      <h3 style="font-size:22px;margin-bottom:8px;">Command Veto</h3>
-      <p style="font-size:16px;">Pattern blocks for rm -rf, chmod 777, DROP TABLE.</p>
-    </div>
-    <div class="card">
-      <div style="margin-bottom:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
-      <h3 style="font-size:22px;margin-bottom:8px;">SOC Dashboard</h3>
-      <p style="font-size:16px;">Cyberpunk incident viewer with risk gauge and terminal tracer.</p>
-    </div>
-    <div class="card">
-      <div style="margin-bottom:8px;"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
-      <h3 style="font-size:22px;margin-bottom:8px;">100% Local</h3>
-      <p style="font-size:16px;">No credentials leave the dev machine. Zero cloud dependency.</p>
-    </div>
-  </div>
-  <aside class="speaker-notes">The DeBERTa-Sec classifier is the innovation. It's not just regex — it uses transformer-based classification to distinguish real secrets from legitimate high-entropy strings.</aside>
-</div>
-
-<!-- SLIDE 8: WHY NOW -->
-<div class="slide" style="flex-direction:column;justify-content:center;background:var(--bg);">
-  <div class="label" style="margin-bottom:16px;">WHY NOW</div>
-  <h2 style="margin-bottom:40px;">AI agents are the new attack surface</h2>
-  <div style="display:flex;gap:60px;align-items:center;">
-    <div style="flex:1;">
-      <div style="margin-bottom:32px;">
-        <span class="mono" style="font-size:64px;color:var(--accent);font-weight:900;">73%</span>
-        <p style="margin-top:8px;">of developers will use AI coding agents by 2027 (GitHub survey)</p>
-      </div>
-      <div style="margin-bottom:32px;">
-        <span class="mono" style="font-size:64px;color:var(--primary);font-weight:900;">8.3ms</span>
-        <p style="margin-top:8px;">Scan overhead — invisible to the developer workflow</p>
-      </div>
-      <div>
-        <span class="mono" style="font-size:64px;color:var(--warning);font-weight:900;">$0</span>
-        <p style="margin-top:8px;">Existing solutions that work locally without cloud APIs</p>
+    <!-- Slide 02: The Problem -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 02 · The Problem</span>
+      <h2 class="text-4xl md:text-5xl font-bold tracking-tight">
+        AI Agents Have<br/>
+        <span class="text-red-400">Shell Access.</span>
+      </h2>
+      <div class="accent-line"></div>
+      <p class="text-slate-400 max-w-2xl leading-relaxed text-lg">
+        Copilot, Cursor, and Aider agents execute terminal commands with the developer's full permission set. One hallucinated command can leak API keys, destroy databases, or exfiltrate credentials.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+        <div class="glass rounded-xl p-6 glow-danger">
+          <span class="text-red-400 font-mono text-xs uppercase tracking-wider">Attack Vector 1</span>
+          <h3 class="text-lg font-bold mt-2 mb-2">Secret Exfiltration</h3>
+          <p class="text-slate-400 text-sm">Agent leaks API keys, tokens, or credentials in curl commands, env dumps, or git commits</p>
+        </div>
+        <div class="glass rounded-xl p-6 glow-danger">
+          <span class="text-red-400 font-mono text-xs uppercase tracking-wider">Attack Vector 2</span>
+          <h3 class="text-lg font-bold mt-2 mb-2">Destructive Commands</h3>
+          <p class="text-slate-400 text-sm">rm -rf, chmod 777, DROP TABLE — one hallucination wipes a production environment</p>
+        </div>
+        <div class="glass rounded-xl p-6 glow-danger">
+          <span class="text-red-400 font-mono text-xs uppercase tracking-wider">Attack Vector 3</span>
+          <h3 class="text-lg font-bold mt-2 mb-2">Prompt Injection</h3>
+          <p class="text-slate-400 text-sm">Adversarial code in dependencies tricks agents into running arbitrary shell commands</p>
+        </div>
       </div>
     </div>
-    <div class="card" style="flex:1;padding:48px;">
-      <h3 style="margin-bottom:24px;">Market Gap</h3>
-      <p style="margin-bottom:16px;">GitHub secret scanning works post-push — the damage is done. VetoBlast works pre-execution.</p>
-      <p style="margin-bottom:16px;">GitGuardian requires cloud. VetoBlast runs 100% locally — no API key, no subscription, no data leaving the machine.</p>
-      <p>ONNX runtime makes transformer inference fast enough for real-time terminal scanning on commodity hardware.</p>
-    </div>
-  </div>
-  <aside class="speaker-notes">73% of devs will use AI agents by 2027. Existing tools (GitHub scanning, GitGuardian) work post-push or require cloud. VetoBlast is pre-execution and fully local.</aside>
-</div>
 
-<!-- SLIDE 9: TRACTION -->
-<div class="slide" style="flex-direction:column;justify-content:center;background:var(--bg);">
-  <div class="label" style="margin-bottom:16px;">TRACTION</div>
-  <h2 style="margin-bottom:40px;">Shipped in 48 hours</h2>
-  <div class="grid-3">
-    <div class="card" style="text-align:center;">
-      <span class="mono" style="font-size:56px;color:var(--accent);font-weight:900;">1,847</span>
-      <p style="margin-top:8px;">Total command scans processed in demo mode</p>
+    <!-- Slide 03: The Solution -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 03 · The Solution</span>
+      <h2 class="text-4xl md:text-5xl font-bold tracking-tight">
+        Every Command.<br/>
+        <span class="text-red-400">Inspected.</span>
+      </h2>
+      <div class="accent-line"></div>
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-4">
+        <div class="stat-card rounded-xl p-6 text-center">
+          <span class="text-3xl font-black text-red-400">&lt;5ms</span>
+          <p class="text-slate-400 text-xs mt-2">Per-command scan latency</p>
+        </div>
+        <div class="stat-card rounded-xl p-6 text-center">
+          <span class="text-3xl font-black text-red-400">0.2%</span>
+          <p class="text-slate-400 text-xs mt-2">False positive rate</p>
+        </div>
+        <div class="stat-card-safe rounded-xl p-6 text-center">
+          <span class="text-3xl font-black text-cyan-400">99.9%</span>
+          <p class="text-slate-400 text-xs mt-2">Uptime (proxy SLA)</p>
+        </div>
+        <div class="stat-card rounded-xl p-6 text-center">
+          <span class="text-3xl font-black text-red-400">6</span>
+          <p class="text-slate-400 text-xs mt-2">Secret types detected</p>
+        </div>
+      </div>
     </div>
-    <div class="card" style="text-align:center;">
-      <span class="mono" style="font-size:56px;color:var(--primary);font-weight:900;">19</span>
-      <p style="margin-top:8px;">Unique secrets caught and redacted</p>
-    </div>
-    <div class="card" style="text-align:center;">
-      <span class="mono" style="font-size:56px;color:var(--success);font-weight:900;">2%</span>
-      <p style="margin-top:8px;">False positive rate — SHA hashes correctly classified as benign</p>
-    </div>
-  </div>
-  <div style="margin-top:48px;">
-    <h3 style="margin-bottom:24px;">Deliverables</h3>
-    <div style="display:flex;gap:16px;flex-wrap:wrap;">
-      <span class="badge badge-cyan" style="font-size:11px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><polyline points="20 6 9 17 4 12"/></svg> Next.js 16 SOC Dashboard</span>
-      <span class="badge badge-cyan" style="font-size:11px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><polyline points="20 6 9 17 4 12"/></svg> Terminal Tracer</span>
-      <span class="badge badge-cyan" style="font-size:11px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><polyline points="20 6 9 17 4 12"/></svg> Incident Review</span>
-      <span class="badge badge-cyan" style="font-size:11px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><polyline points="20 6 9 17 4 12"/></svg> Risk Gauge</span>
-      <span class="badge badge-cyan" style="font-size:11px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-1px;"><polyline points="20 6 9 17 4 12"/></svg> MIT Licensed</span>
-    </div>
-  </div>
-  <aside class="speaker-notes">1,847 scans, 19 secrets caught, 2% false positive rate. Full CI pipeline passing. This is demo data — the architecture and classifier are production-grade.</aside>
-</div>
 
-<!-- SLIDE 10: THE ASK -->
-<div class="slide" style="flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(135deg,#0a0a0f 0%,#111118 100%);">
-  <h1 style="margin-bottom:24px;">VetoBlast <span style="color:var(--accent);"><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-0.125em;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span></h1>
-  <h3 style="color:#94a3b8;font-weight:400;margin-bottom:48px;max-width:700px;">Your AI tried. Veto said no.</h3>
-  <div style="display:flex;gap:24px;margin-bottom:48px;">
-    <div class="card" style="padding:24px 40px;text-align:center;">
-      <div class="label">Live Demo</div>
-      <img src="https://placehold.co/120x120/111118/ef4444?text=QR" alt="QR" style="margin-top:12px;border-radius:8px;"/>
+    <!-- Slide 04: Architecture -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 04 · Architecture</span>
+      <h2 class="text-4xl font-bold tracking-tight mb-4">Intercept Pipeline</h2>
+      <div class="flex flex-col md:flex-row items-center gap-4 md:gap-6">
+        <div class="glass rounded-xl p-5 flex-1 text-center">
+          <div class="text-2xl mb-2">🤖</div>
+          <h3 class="font-bold text-sm mb-1">AI Agent</h3>
+          <p class="text-slate-500 text-xs">Copilot / Cursor / Aider issues shell command</p>
+        </div>
+        <span class="flow-arrow hidden md:block">→</span>
+        <div class="glass rounded-xl p-5 flex-1 text-center glow-red">
+          <div class="text-2xl mb-2">🛡️</div>
+          <h3 class="font-bold text-sm mb-1 text-red-400">VetoBlast Proxy</h3>
+          <p class="text-slate-500 text-xs">Regex + DeBERTa-Sec dual-layer analysis</p>
+        </div>
+        <span class="flow-arrow hidden md:block">→</span>
+        <div class="glass rounded-xl p-5 flex-1 text-center">
+          <div class="text-2xl mb-2">🔍</div>
+          <h3 class="font-bold text-sm mb-1">Secret Scanner</h3>
+          <p class="text-slate-500 text-xs">Entropy + pattern match for API keys / tokens</p>
+        </div>
+        <span class="flow-arrow hidden md:block">→</span>
+        <div class="glass rounded-xl p-5 flex-1 text-center">
+          <div class="text-2xl mb-2">✅</div>
+          <h3 class="font-bold text-sm mb-1">Terminal</h3>
+          <p class="text-slate-500 text-xs">Safe commands pass through, threats are blocked</p>
+        </div>
+      </div>
     </div>
-    <div class="card" style="padding:24px 40px;text-align:center;">
-      <div class="label">GitHub</div>
-      <img src="https://placehold.co/120x120/111118/06b6d4?text=QR" alt="QR" style="margin-top:12px;border-radius:8px;"/>
-    </div>
-  </div>
-  <p class="mono" style="color:var(--muted);font-size:16px;">Built by Edy Cu · UOE Summer of Code 2026</p>
-  <aside class="speaker-notes">End with the tagline: "Your AI tried. Veto said no." Ask judges to test the live demo. Every AI agent needs a bodyguard. VetoBlast is that bodyguard.</aside>
-</div>
 
-</div>
-<div class="slide-counter" id="counter">01 / 10</div>
-<script>
-const slides=document.querySelectorAll('.slide'),counter=document.getElementById('counter'),stage=document.getElementById('stage');let current=0;const total=slides.length;
-function show(n){slides.forEach(s=>s.classList.remove('active'));current=((n%total)+total)%total;slides[current].classList.add('active');counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');}
-function resize(){const s=Math.min(window.innerWidth/1920,window.innerHeight/1080);stage.style.transform=`scale(${s})`;}
-window.addEventListener('resize',resize);resize();
-document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();show(current+1);}if(e.key==='ArrowLeft'){e.preventDefault();show(current-1);}if(e.key==='p'||e.key==='P')document.body.classList.toggle('presenter');if(e.key==='c'||e.key==='C')document.querySelectorAll('h1,h2,h3,p,span,.label,.badge').forEach(el=>el.classList.toggle('contrast-check'));});
-</script>
+    <!-- Slide 05: Technical Stack -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 05 · Tech Stack</span>
+      <h2 class="text-4xl font-bold tracking-tight">Technical Architecture</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="glass rounded-xl p-6">
+          <span class="text-red-400 font-mono text-xs uppercase tracking-wider">Dashboard</span>
+          <h3 class="font-bold mt-2 mb-1">Next.js 16 + React 19</h3>
+          <p class="text-slate-400 text-sm">SOC-grade incident dashboard with real-time intercept log, threat categorization, and approve/reject workflow.</p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <span class="text-red-400 font-mono text-xs uppercase tracking-wider">Proxy Engine</span>
+          <h3 class="font-bold mt-2 mb-1">Python FastAPI</h3>
+          <p class="text-slate-400 text-sm">Transparent MitM proxy intercepting agent subprocess calls. Dual-layer: regex + ML classification.</p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <span class="text-red-400 font-mono text-xs uppercase tracking-wider">ML Model</span>
+          <h3 class="font-bold mt-2 mb-1">DeBERTa-Sec (ONNX)</h3>
+          <p class="text-slate-400 text-sm">Fine-tuned DeBERTa for command intent classification. 6 threat categories at 0.97 precision.</p>
+        </div>
+        <div class="glass rounded-xl p-6">
+          <span class="text-red-400 font-mono text-xs uppercase tracking-wider">Data Layer</span>
+          <h3 class="font-bold mt-2 mb-1">Supabase + Realtime</h3>
+          <p class="text-slate-400 text-sm">Incident logging with RLS. Real-time dashboard updates via Supabase subscriptions.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 06: DeBERTa Innovation -->
+    <div class="slide max-w-5xl w-full flex-col md:flex-row items-center justify-between gap-12">
+      <div class="flex-1 flex flex-col items-start text-left">
+        <span class="text-xs font-mono tracking-widest text-red-400 uppercase mb-6">Slide 06 · Innovation</span>
+        <h2 class="text-4xl font-bold tracking-tight mb-4">
+          DeBERTa-Sec<br/>Dual-Layer Scanner
+        </h2>
+        <div class="accent-line mb-6"></div>
+        <p class="text-slate-400 leading-relaxed">
+          Simple regex blocklists are easily bypassed — agents can encode secrets in base64, use variable interpolation, or chain commands. DeBERTa-Sec classifies command <strong class="text-slate-200">intent</strong>, catching obfuscation patterns that pattern matching misses.
+        </p>
+      </div>
+      <div class="flex-1 glass rounded-2xl p-6 max-w-md w-full">
+        <span class="text-[10px] font-mono text-slate-600 uppercase tracking-wider block mb-4">Bypass Attempt → Caught</span>
+        <div class="font-mono text-xs space-y-2">
+          <div class="text-slate-500">// Obfuscated exfiltration attempt</div>
+          <div class="text-slate-300">echo $AWS_SECRET | base64 | curl -d @-</div>
+          <div class="text-slate-500 mt-2">// Regex: ✗ MISSED (no literal key)</div>
+          <div class="text-red-400">// DeBERTa-Sec: ✓ CAUGHT</div>
+          <div class="text-red-400">→ Intent: SECRET_EXFILTRATION</div>
+          <div class="text-red-400">→ Confidence: 0.97</div>
+          <div class="text-amber-400 mt-2">→ Action: BLOCK + REDACT + LOG</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 07: Demo -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 07 · Live Demo</span>
+      <h2 class="text-4xl font-bold tracking-tight">What Judges Will See</h2>
+      <div class="accent-line"></div>
+      <div class="space-y-4 mt-4">
+        <div class="glass rounded-xl p-5 flex items-start gap-4">
+          <span class="text-red-400 font-mono text-lg mt-0.5">01</span>
+          <div><h3 class="font-bold mb-1">Live Terminal Intercept Stream</h3><p class="text-slate-400 text-sm">Real-time feed showing commands from 3 monitored agents being scanned, blocked, or approved with threat categorization</p></div>
+        </div>
+        <div class="glass rounded-xl p-5 flex items-start gap-4">
+          <span class="text-red-400 font-mono text-lg mt-0.5">02</span>
+          <div><h3 class="font-bold mb-1">Incident Detail with Secret Redaction</h3><p class="text-slate-400 text-sm">Click any incident to see the redacted payload, entropy score, secret type, and DeBERTa confidence rating</p></div>
+        </div>
+        <div class="glass rounded-xl p-5 flex items-start gap-4">
+          <span class="text-red-400 font-mono text-lg mt-0.5">03</span>
+          <div><h3 class="font-bold mb-1">Approve/Reject Workflow</h3><p class="text-slate-400 text-sm">Human-in-the-loop buttons for operators to approve or reject intercepted commands with audit trail</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 08: Market -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 08 · Market</span>
+      <h2 class="text-4xl font-bold tracking-tight">Market Opportunity</h2>
+      <div class="accent-line"></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+        <div class="stat-card rounded-xl p-6 text-center">
+          <span class="text-4xl font-black text-red-400">92%</span>
+          <p class="text-slate-400 text-sm mt-2">Of developers now use AI coding agents</p>
+        </div>
+        <div class="stat-card rounded-xl p-6 text-center">
+          <span class="text-4xl font-black text-red-400">$4.5M</span>
+          <p class="text-slate-400 text-sm mt-2">Average cost of a data breach (2025)</p>
+        </div>
+        <div class="stat-card rounded-xl p-6 text-center">
+          <span class="text-4xl font-black text-red-400">$5.8B</span>
+          <p class="text-slate-400 text-sm mt-2">AI code generation market (2026)</p>
+        </div>
+      </div>
+      <p class="text-slate-500 text-sm mt-4">Every enterprise adopting AI agents needs a security gateway. VetoBlast is the runtime firewall for the agent era.</p>
+    </div>
+
+    <!-- Slide 09: Why Us -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 09 · Why Us</span>
+      <h2 class="text-4xl font-bold tracking-tight">Competitive Edge</h2>
+      <div class="accent-line"></div>
+      <div class="overflow-x-auto mt-4">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left border-b border-slate-800">
+              <th class="py-3 pr-8 text-slate-500 font-mono text-xs uppercase">Feature</th>
+              <th class="py-3 pr-8 text-red-400 font-mono text-xs uppercase">VetoBlast</th>
+              <th class="py-3 pr-8 text-slate-500 font-mono text-xs uppercase">Git Hooks</th>
+              <th class="py-3 text-slate-500 font-mono text-xs uppercase">.gitignore Only</th>
+            </tr>
+          </thead>
+          <tbody class="text-slate-400">
+            <tr class="border-b border-slate-900"><td class="py-2.5 pr-8">Scan Stage</td><td class="pr-8 text-emerald-400">Pre-execution</td><td class="pr-8">Post-commit</td><td>Post-push</td></tr>
+            <tr class="border-b border-slate-900"><td class="py-2.5 pr-8">ML Classification</td><td class="pr-8 text-emerald-400">DeBERTa-Sec intent</td><td class="pr-8">None</td><td>None</td></tr>
+            <tr class="border-b border-slate-900"><td class="py-2.5 pr-8">Secret Redaction</td><td class="pr-8 text-emerald-400">Real-time entropy</td><td class="pr-8">Pattern only</td><td>No</td></tr>
+            <tr class="border-b border-slate-900"><td class="py-2.5 pr-8">Agent-Aware</td><td class="pr-8 text-emerald-400">Tracks per-agent</td><td class="pr-8">No</td><td>No</td></tr>
+            <tr><td class="py-2.5 pr-8">HITL Workflow</td><td class="pr-8 text-emerald-400">Approve/Reject</td><td class="pr-8">No</td><td>No</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Slide 10: Roadmap -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 10 · Roadmap</span>
+      <h2 class="text-4xl font-bold tracking-tight">30 / 60 / 90-Day Plan</h2>
+      <div class="accent-line"></div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-4">
+        <div class="glass rounded-xl p-6 border-t-2 border-t-red-500">
+          <span class="text-red-400 font-mono text-xs uppercase">30 Days</span>
+          <h3 class="font-bold mt-3 mb-2">Foundation</h3>
+          <ul class="text-slate-400 text-sm space-y-1.5">
+            <li>• Production proxy daemon packaging</li>
+            <li>• VS Code extension for inline alerts</li>
+            <li>• SAST integration (Semgrep, Snyk)</li>
+          </ul>
+        </div>
+        <div class="glass rounded-xl p-6 border-t-2 border-t-amber-500">
+          <span class="text-amber-400 font-mono text-xs uppercase">60 Days</span>
+          <h3 class="font-bold mt-3 mb-2">Growth</h3>
+          <ul class="text-slate-400 text-sm space-y-1.5">
+            <li>• Enterprise policy engine (YAML rules)</li>
+            <li>• SOC2 compliance audit logging</li>
+            <li>• Multi-agent fleet monitoring</li>
+          </ul>
+        </div>
+        <div class="glass rounded-xl p-6 border-t-2 border-t-emerald-500">
+          <span class="text-emerald-400 font-mono text-xs uppercase">90 Days</span>
+          <h3 class="font-bold mt-3 mb-2">Scale</h3>
+          <ul class="text-slate-400 text-sm space-y-1.5">
+            <li>• Cloud-hosted SaaS dashboard</li>
+            <li>• Custom DeBERTa fine-tuning per org</li>
+            <li>• Integration with Wiz, CrowdStrike</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Team -->
+    <div class="slide max-w-5xl w-full flex-col text-left gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 11 · Team</span>
+      <h2 class="text-4xl font-bold tracking-tight">Built by Solo Engineers</h2>
+      <div class="accent-line"></div>
+      <div class="glass rounded-xl p-8 mt-4 max-w-lg">
+        <h3 class="font-bold text-xl mb-2">Edy Cu</h3>
+        <span class="text-red-400 font-mono text-xs uppercase tracking-wider">Full-Stack Security Engineer</span>
+        <p class="text-slate-400 text-sm mt-3 leading-relaxed">
+          Solo developer building zero-trust AI agent security — from DeBERTa fine-tuning to transparent proxy engineering to SOC-grade incident dashboards. Securing the developer workflow of the future.
+        </p>
+        <div class="flex gap-2 mt-4">
+          <span class="px-2.5 py-1 text-[10px] font-mono border border-slate-800 text-slate-500 rounded">DeBERTa</span>
+          <span class="px-2.5 py-1 text-[10px] font-mono border border-slate-800 text-slate-500 rounded">FastAPI</span>
+          <span class="px-2.5 py-1 text-[10px] font-mono border border-slate-800 text-slate-500 rounded">Next.js</span>
+          <span class="px-2.5 py-1 text-[10px] font-mono border border-slate-800 text-slate-500 rounded">ONNX</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 12: Conclusion -->
+    <div class="slide max-w-5xl w-full flex-col items-center text-center gap-8">
+      <span class="text-xs font-mono tracking-widest text-red-400 uppercase">Slide 12 · Conclusion</span>
+      <h2 class="text-5xl md:text-6xl font-black tracking-tighter leading-tight">
+        Your agent tried.<br/><span class="text-red-500">Veto said no.</span>
+      </h2>
+      <div class="accent-line mx-auto"></div>
+      <p class="text-slate-400 text-lg max-w-lg">
+        VetoBlast is the runtime firewall for the AI agent era — scanning every command, redacting every secret, and blocking every threat before it reaches the terminal.
+      </p>
+      <div class="flex items-center gap-4 mt-4">
+        <a href="https://github.com/edycutjong/vetoblast" target="_blank" class="px-5 py-2.5 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg font-mono text-xs hover:bg-red-500/20 transition-all">GitHub Repository</a>
+        <a href="/" class="px-5 py-2.5 bg-slate-800/50 border border-slate-700 text-slate-300 rounded-lg font-mono text-xs hover:bg-slate-800 transition-all">Live Dashboard</a>
+      </div>
+      <p class="text-slate-600 text-xs font-mono mt-8">VetoBlast · UOE Summer of Code 2026</p>
+    </div>
+
+  </div>
+
+  <footer class="h-14 border-t border-slate-900 bg-[#09090b]/80 backdrop-blur-lg flex items-center justify-between px-6 md:px-8 z-20 shrink-0">
+    <div class="text-[10px] font-mono text-slate-600 uppercase tracking-wider">VetoBlast · Pitch Deck</div>
+    <div class="flex items-center gap-4">
+      <button onclick="prevSlide()" class="px-4 py-1.5 border border-slate-800 hover:border-slate-600 rounded-lg text-xs font-mono text-slate-500 hover:text-slate-200 transition-all select-none">← PREV</button>
+      <span id="slide-num" class="text-xs font-mono text-red-400 slide-number w-12 text-center">1 / 12</span>
+      <button onclick="nextSlide()" class="px-4 py-1.5 border border-slate-800 hover:border-slate-600 rounded-lg text-xs font-mono text-slate-500 hover:text-slate-200 transition-all select-none">NEXT →</button>
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const slideNum = document.getElementById('slide-num');
+    function updateSlides() { slides.forEach((s, i) => s.classList.toggle('active', i === currentSlide)); slideNum.textContent = `${currentSlide + 1} / ${slides.length}`; }
+    function prevSlide() { if (currentSlide > 0) { currentSlide--; updateSlides(); } }
+    function nextSlide() { if (currentSlide < slides.length - 1) { currentSlide++; updateSlides(); } }
+    document.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide(); if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); nextSlide(); } });
+    let touchStartX = 0;
+    document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; });
+    document.addEventListener('touchend', (e) => { const dx = e.changedTouches[0].screenX - touchStartX; if (dx > 50) prevSlide(); if (dx < -50) nextSlide(); });
+  </script>
 </body>
 </html>
