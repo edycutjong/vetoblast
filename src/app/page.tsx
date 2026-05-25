@@ -93,7 +93,17 @@ function TerminalStream() {
 }
 
 /* ── Incident Detail Panel ── */
-function IncidentDetail({ incident }: { incident: Incident }) {
+function IncidentDetail({
+  incident,
+  decision,
+  onApprove,
+  onReject,
+}: {
+  incident: Incident;
+  decision: "approved" | "rejected" | null;
+  onApprove: () => void;
+  onReject: () => void;
+}) {
   return (
     <div className={cn("glass-card overflow-hidden", incident.threatLevel === "critical" && "border-red-500/30")}>
       <div className="px-5 py-3 border-b border-[var(--border)] flex items-center justify-between">
@@ -151,11 +161,27 @@ function IncidentDetail({ incident }: { incident: Incident }) {
 
         {/* Action Buttons */}
         <div className="flex gap-2 pt-2">
-          <button className="flex-1 py-2 rounded-lg text-xs font-mono bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/30 transition-colors">
-            APPROVE
+          <button
+            onClick={onApprove}
+            className={cn(
+              "flex-1 py-2 rounded-lg text-xs font-mono border transition-colors",
+              decision === "approved"
+                ? "bg-emerald-500/40 text-emerald-300 border-emerald-500/60"
+                : "bg-emerald-500/20 text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/30"
+            )}
+          >
+            {decision === "approved" ? "APPROVED ✓" : "APPROVE"}
           </button>
-          <button className="flex-1 py-2 rounded-lg text-xs font-mono bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30 transition-colors">
-            REJECT
+          <button
+            onClick={onReject}
+            className={cn(
+              "flex-1 py-2 rounded-lg text-xs font-mono border transition-colors",
+              decision === "rejected"
+                ? "bg-red-500/40 text-red-300 border-red-500/60"
+                : "bg-red-500/20 text-red-400 border-red-500/30 hover:bg-red-500/30"
+            )}
+          >
+            {decision === "rejected" ? "REJECTED ✗" : "REJECT"}
           </button>
         </div>
       </div>
@@ -166,6 +192,7 @@ function IncidentDetail({ incident }: { incident: Incident }) {
 /* ── Main Dashboard ── */
 export default function Home() {
   const [selectedIncident, setSelectedIncident] = useState<Incident>(MOCK_INCIDENTS[0]);
+  const [decisions, setDecisions] = useState<Record<string, "approved" | "rejected">>({});
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -173,10 +200,8 @@ export default function Home() {
       {/* Header */}
       <header className="flex items-center justify-between px-6 py-4 border-b border-[var(--border)] bg-[var(--surface)]/50 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-red-500 to-cyan-600 flex items-center justify-center">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
+          <div className="w-8 h-8 rounded-lg overflow-hidden flex-shrink-0">
+            <img src="/icon.svg" alt="VetoBlast" className="w-full h-full" />
           </div>
           <h1 className="text-lg font-bold tracking-tight text-[var(--text-high)]">VetoBlast</h1>
           <span className="text-[10px] font-mono text-red-400 bg-red-500/10 border border-red-500/20 px-2 py-0.5 rounded-full animate-pulse-danger">
@@ -250,8 +275,11 @@ export default function Home() {
               </p>
               <div className="flex items-center justify-between text-[10px] font-mono text-[var(--text-low)]">
                 <span>{inc.agentId}</span>
-                <span className={inc.status === "vetoed" ? "text-red-400" : "text-emerald-400"}>
-                  {inc.status.toUpperCase()}
+                <span className={
+                  decisions[inc.id] === "rejected" || (!decisions[inc.id] && inc.status === "vetoed")
+                    ? "text-red-400" : "text-emerald-400"
+                }>
+                  {decisions[inc.id] ? decisions[inc.id].toUpperCase() : inc.status.toUpperCase()}
                 </span>
               </div>
             </button>
@@ -260,7 +288,12 @@ export default function Home() {
 
         {/* Center: Incident Detail */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <IncidentDetail incident={selectedIncident} />
+          <IncidentDetail
+            incident={selectedIncident}
+            decision={decisions[selectedIncident.id] ?? null}
+            onApprove={() => setDecisions(prev => ({ ...prev, [selectedIncident.id]: "approved" }))}
+            onReject={() => setDecisions(prev => ({ ...prev, [selectedIncident.id]: "rejected" }))}
+          />
           <TerminalStream />
         </div>
 

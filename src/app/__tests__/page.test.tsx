@@ -52,12 +52,22 @@ describe('VetoBlast Home Page', () => {
     expect(screen.getAllByText('aider-agent-v2').length).toBeGreaterThanOrEqual(1);
   });
 
-  it('renders approve and reject action buttons in the incident detail panel', () => {
+  it('renders approve and reject action buttons in the incident detail panel and handles clicks', () => {
     render(<Home />);
 
-    // "APPROVE" (exact) and "REJECT" are only in the IncidentDetail action buttons
-    expect(screen.getByText('APPROVE')).toBeInTheDocument();
-    expect(screen.getByText('REJECT')).toBeInTheDocument();
+    const approveButton = screen.getByRole('button', { name: 'APPROVE' });
+    const rejectButton = screen.getByRole('button', { name: 'REJECT' });
+
+    expect(approveButton).toBeInTheDocument();
+    expect(rejectButton).toBeInTheDocument();
+
+    // Click approve
+    fireEvent.click(approveButton);
+    expect(screen.getByRole('button', { name: 'APPROVED ✓' })).toBeInTheDocument();
+
+    // Click reject
+    fireEvent.click(screen.getByRole('button', { name: 'REJECT' }));
+    expect(screen.getByRole('button', { name: 'REJECTED ✗' })).toBeInTheDocument();
   });
 
   it('renders scanner configuration details with block pattern list', () => {
