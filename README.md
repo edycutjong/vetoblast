@@ -7,7 +7,7 @@
 
   [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-ef4444?style=for-the-badge)](https://vetoblast.edycu.dev)
   [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-10b981?style=for-the-badge)](https://vetoblast.edycu.dev/pitch.html)
-  [![Tests](https://img.shields.io/badge/✅_Tests-50_passing-22c55e?style=for-the-badge)](#-testing--ci)
+  [![Tests](https://img.shields.io/badge/✅_Tests-51_passing-22c55e?style=for-the-badge)](#-testing--ci)
   [![Built for UOE](https://img.shields.io/badge/UOE-Summer_of_Code_2026-8b5cf6?style=for-the-badge)](https://uoe-summer-of-code.devpost.com/)
 
   <br/>
@@ -64,7 +64,7 @@ npm run dev
 
 ## 🧪 Testing & CI
 
-**50 passing tests** across 4 test suites — covering mock data integrity, incident log consistency, entropy/confidence validation, threat level coverage, metrics cross-validation, terminal feed type validation, and all interactive dashboard state transitions.
+**51 passing tests** across 4 test suites — covering mock data integrity, incident log consistency, entropy/confidence validation, threat level coverage, metrics cross-validation, terminal feed type validation, and all interactive dashboard state transitions.
 
 ```bash
 npm test              # Run all 50 tests
