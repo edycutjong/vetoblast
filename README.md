@@ -8,6 +8,7 @@
 
   [![Live Demo](https://img.shields.io/badge/🚀_Live-Demo-ef4444?style=for-the-badge)](https://vetoblast.edycu.dev)
   [![Pitch Deck](https://img.shields.io/badge/📊_Pitch-Deck-10b981?style=for-the-badge)](https://vetoblast.edycu.dev/pitch.html)
+  [![YouTube Demo](https://img.shields.io/badge/▶_YouTube-Demo-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://youtu.be/2yhqErPzRI8)
   [![Tests](https://img.shields.io/badge/✅_Tests-51_passing-22c55e?style=for-the-badge)](#-testing--ci)
   [![Built for UOE](https://img.shields.io/badge/UOE-Summer_of_Code_2026-8b5cf6?style=for-the-badge)](https://uoe-summer-of-code.devpost.com/)
 
