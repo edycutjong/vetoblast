@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="public/icon.svg" alt="VetoBlast icon" width="120" height="120">
   <h1>VetoBlast 🛡️</h1>
   <p><em>Zero-trust runtime proxy that intercepts AI agent commands, redacts secrets, and vetoes destructive executions</em></p>
   <img src="docs/readme-hero.png" alt="VetoBlast" width="100%">
