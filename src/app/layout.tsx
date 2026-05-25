@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     title: "VetoBlast — Zero-Trust AI Agent Command Interceptor",
     description:
       "Local-first security gateway protecting developer workspaces from AI agent credential leaks and destructive commands.",
-    url: "https://devpost-uoe-vetoblast.vercel.app",
+    url: "https://vetoblast.edycu.dev",
     siteName: "VetoBlast",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "VetoBlast" }],
     locale: "en_US",
