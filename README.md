@@ -57,6 +57,51 @@ graph TD
 | **Audit Log** | Supabase (PostgreSQL) |
 | **Communication** | WebSocket (real-time threat stream) |
 
+## 🗄️ Database Schema
+
+Data is persisted in **Supabase (PostgreSQL)** with Row-Level Security enabled. All tables use the `vb_` prefix to namespace within the shared Supabase instance.
+
+```mermaid
+erDiagram
+    vb_incidents {
+        text id PK
+        timestamptz timestamp
+        text agent_id
+        text command_attempted
+        varchar threat_category
+        varchar threat_level
+        text redacted_payload
+        jsonb detected_secrets
+        varchar status
+        timestamptz created_at
+    }
+    vb_metrics {
+        serial id PK
+        int total_scans
+        int total_blocked
+        int total_approved
+        numeric avg_scan_latency_ms
+        numeric false_positive_rate
+        int secrets_caught
+        text uptime
+    }
+    vb_terminal_feed {
+        serial id PK
+        text time
+        text type
+        text msg
+        timestamptz created_at
+    }
+```
+
+| Table | Purpose | Rows |
+|---|---|---|
+| `vb_incidents` | Intercepted agent commands — threat level, redacted payload, detected secrets (JSONB) | 6 |
+| `vb_metrics` | Aggregate scanner stats — total scans, blocked count, latency, false positive rate | 1 |
+| `vb_terminal_feed` | Live terminal proxy log — timestamped block/pass/scan events | 8 |
+
+> **RLS Policy**: Anonymous read access enabled on all tables. Write operations require `service_role` key.
+
 ## 🚀 Getting Started
 
 ### Prerequisites
