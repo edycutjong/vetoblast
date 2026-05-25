@@ -17,7 +17,8 @@
   ![React](https://img.shields.io/badge/React_19-61DAFB?style=flat&logo=react&logoColor=black)
   ![Tailwind](https://img.shields.io/badge/Tailwind_v4-38B2AC?style=flat&logo=tailwindcss&logoColor=white)
   ![Node.js](https://img.shields.io/badge/Node.js-339933?style=flat&logo=node.js&logoColor=white)
-  [![CI](https://github.com/edycutjong/vetoblast/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/vetoblast/actions/workflows/ci.yml)
+  ![Python](https://img.shields.io/badge/Python_3.12-3776AB?style=flat&logo=python&logoColor=white)
+  [![CI](https://github.com/edycutjong/devpost-uoe-vetoblast/actions/workflows/ci.yml/badge.svg)](https://github.com/edycutjong/devpost-uoe-vetoblast/actions/workflows/ci.yml)
 
 </div>
 
@@ -64,8 +65,8 @@ graph TD
 
 ### Installation
 ```bash
-git clone https://github.com/edycutjong/vetoblast.git
-cd vetoblast
+git clone https://github.com/edycutjong/devpost-uoe-vetoblast.git
+cd devpost-uoe-vetoblast
 npm install
 cp .env.example .env.local
 npm run dev
@@ -88,7 +89,7 @@ CI runs on Node.js 20, 22, and 24 via GitHub Actions on every push.
 
 ## 📁 Project Structure
 ```
-vetoblast/
+devpost-uoe-vetoblast/
 ├── docs/              # README assets
 ├── src/
 │   ├── app/           # Next.js pages + __tests__/
