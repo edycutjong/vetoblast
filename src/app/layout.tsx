@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://vetoblast.edycu.dev"),
   title: "VetoBlast — Zero-Trust AI Agent Command Interceptor",
   description:
     "A zero-trust runtime proxy that intercepts AI agent terminal commands, redacting secrets and vetoing malicious shell executions.",
