@@ -49,7 +49,6 @@ body {
 }
 
 .glow-red { box-shadow: 0 0 24px var(--danger-glow); }
-.glow-cyan { box-shadow: 0 0 24px var(--primary-glow); }
 
 @keyframes scan-line {
   0% { transform: translateY(-100%); }
@@ -62,11 +61,6 @@ body {
   50% { opacity: 0.4; }
 }
 .animate-pulse-danger { animation: pulse-danger 1s ease-in-out infinite; }
-
-@keyframes typewriter {
-  from { width: 0; }
-  to { width: 100%; }
-}
 
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }

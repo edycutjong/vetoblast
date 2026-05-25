@@ -38,6 +38,16 @@ AI coding agents scan `.env` files, execute shell commands, and send prompts to 
 
 ## 🏗️ Architecture & Tech Stack
 
+```mermaid
+graph TD
+    Agent[Autonomous AI Agent] <-->|Terminal Commands / Stdin| Proxy[VetoBlast Proxy <br/> Node.js / node-pty]
+    Proxy -->|Raw Streams| ONNX[DeBERTa-Sec Classifier <br/> Python FastAPI / ONNX-runtime]
+    Proxy <-->|WebSocket Stream| UI[Next.js 16 / React 19 Dashboard]
+    UI <-->|Approve/Reject Signals| Proxy
+    Proxy -->|Log Actions| Supabase[Supabase Database]
+    Proxy <-->|Filter Output / Stdout| Agent
+```
+
 | Layer | Technology |
 |---|---|
 | **Dashboard** | Next.js 16 (App Router), React 19, Tailwind CSS v4 |
@@ -66,7 +76,7 @@ npm run dev
 **51 passing tests** across 4 test suites — covering mock data integrity, incident log consistency, entropy/confidence validation, threat level coverage, metrics cross-validation, terminal feed type validation, and all interactive dashboard state transitions.
 
 ```bash
-npm test              # Run all 50 tests
+npm test              # Run all 51 tests
 npm run test:coverage # Coverage report
 npm run lint          # ESLint
 npm run typecheck     # TypeScript check
