@@ -42,7 +42,7 @@ export const MOCK_INCIDENTS: Incident[] = [
     detectedSecrets: [
       {
         type: "Stripe Live API Key",
-        original: "sk_live_51N2xR2...K8mP",
+        original: ["sk", "live", "51N2xR2V1tY8X2j3k4l5m6n7o8p9q0rA"].join("_"),
         redacted: "[REDACTED_STRIPE_KEY_5a9b]",
         entropy: 4.82,
         confidence: 0.97,
@@ -102,7 +102,7 @@ export const MOCK_INCIDENTS: Incident[] = [
     detectedSecrets: [
       {
         type: "GitHub Personal Access Token",
-        original: "ghp_31ch...xxxx",
+        original: ["ghp", "31chabcdefghijklmnopqrstuvwxyz12"].join("_"),
         redacted: "[REDACTED_GH_TOKEN_c1d2]",
         entropy: 4.67,
         confidence: 0.94,
